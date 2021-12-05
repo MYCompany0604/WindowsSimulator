@@ -1,0 +1,1787 @@
+<html>
+
+
+
+<title>Windows Vista Simulator - Alpha</title>
+
+<META name="description" content="Microsoft Windows Vista Emulator/Simulator">
+<META name="keywords" content="windows, vista, emulator, simulator">
+
+
+<style>
+.ContextMenu {
+position: absolute;
+top: 0;
+left: 0;
+
+cursor: default;
+
+visibility: hidden;
+z-index: 50000;
+}
+</style>
+
+<body id="mainBody" bgcolor="#666666" onClick="if (dontCloseMenu == 0) { rcCloseContext(); } else { dontCloseMenu = 0; }" onmouseup="fMouseUp();" onContextMenu="rcContextMenu(); return false;" style="overflow: hidden; cursor: wait;" onLoad="document.getElementById('mainBody').style.cursor = 'default';"><script type="text/javascript" src="https://ad.netowl.jp/js/star-php.js"></script>
+
+<div id="WorkInProgress" style="position: absolute; top: 0; left: 607; visibility: hidden; z-index: 100000;" onSelectStart="return false;" onClick="this.style.visibility='hidden';"><table bgcolor="#EE0000" style="border: 1px solid #000000;"><tr><td nowrap><font color="#ffffff"><b>Work currently in progress.</b></font></td></tr></table></div>
+
+<div id="lContextMenu" class="ContextMenu" onSelectStart="return false;">Uh oh! Something went wrong!<br>You should <b>not</b> be seeing this!</div>
+
+<div id="Survey" style="visibility: hidden; position: absolute; top: 200; left: 238; width: 325; height: 75; border: 2px #000000 solid; background: #ffffaa; z-index: 1000000;"><table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%"><tr><td align="center" valing="middle">Would you like to take a 30 second survey?<br><img width="1" height="10"><br><input type="button" value="Yes" onClick="window.open('/survey/index.html', 'Survey', 'height=410,width=430,resizable=no,scrollbars=no,status=no,toolbar=no,titlebar=no,menubar=no'); document.getElementById('Survey').style.visibility='hidden';"><img width="15" height="1"><input type="button" value="No" onClick="document.getElementById('Survey').style.visibility='hidden';"></td></tr></table></div>
+
+
+<div style="position: absolute; visibility: hidden;"><img src="images/0.jpg"><img src="images/1.jpg"><img src="images/2.jpg"><img src="images/3.jpg"><img src="images/4.jpg"><img src="images/5.jpg"><img src="images/6.jpg"><img src="images/7.jpg"><img src="images/8.jpg"><img src="images/9.jpg"><img src="images/AM.jpg"><img src="images/PM.jpg"><img src="images/colon-Clock.jpg"></div>
+
+<div id="lTime" style="position: absolute; top: 580; left: 735; z-index: 1; cursor: pointer;" onClick="fShowWindow('clock-pop-up-calendar');"><table bgcolor="" border="0" cellpadding="0" cellspacing="0" onClick="fShowWindow('clock-pop-up-calendar');"><tr><td width="50" id="Clock-Time" align="right"></td></tr></table></div>
+
+<!-- -------------------------------- Window Layers -------------------------------- -->
+
+
+<div id="background" style="position: absolute; top: 0; left: 0; z-index: 0; visibility: Visible;" onContextMenu="return false;"><img src="images/background.jpg" width="800" height="600" border="0" USEMAP="#Desktop"></div>
+
+<div id="start" style="position: absolute; top: 36; left: 0; visibility: hidden; z-index: 1024;" onContextMenu="return false;">
+<img src="images/start.jpg" width="406" height="564" border="0" USEMAP="#Start">
+<div id="Start-Search-Bar" style="position: absolute; top: 505; left: 12;"><form onSubmit="doStartSearch(); return false;"><input type="text" id="Start-Search" value="Start Search" style="width: 217; height: 19; border: solid 0px #ffffff; font-size: 10pt; background: url('images/start-search-bg.jpg');" onFocus="clickedStartSearch();" onBlur="leftStartSearch()"></form></div>
+</div>
+
+
+<div id="Network-Properties" style="position: absolute; top: 30; left: 20; visibility: hidden; z-index: 1024;" onContextMenu="return false;" onmousedown="fActiveLayer(this.id);">
+
+<table cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff">
+<tr>
+<td colspan="3" width="770" height="63"><img src="images/Network-Properties-t.jpg" width="770" height="63" border="0" usemap="#Network-Properties-t"></td>
+</tr>
+<tr>
+<td align="left" valign="top" width="208" height="394"><img src="images/Network-Properties-l.jpg" width="208" height="394" border="0" usemap="#Network-Properties-l"></td>
+<td><div style="width: 554; height: 393; overflow: auto;"><img src="images/Network-Properties.jpg" width="537" height="1261" border="0" usemap="#Network-Properties"></div></td>
+<td align="left" valign="top"><img src="images/Network-Properties-r.jpg" width="8" height="394" border="0"></td>
+</tr>
+<tr>
+<td width="770" height="31" colspan="3"><img src="images/Network-Properties-b.jpg" width="770" height="31" border="0"></td>
+</tr>
+</table>
+
+</div>
+
+<div id="Network-Connection-Details" style="position: absolute; top: 30; left: 200; visibility: hidden; z-index: 1024;" onContextMenu="return false;" onmousedown="fActiveLayer(this.id);">
+
+<table cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff">
+<tr>
+<td colspan="3" width="376" height="58"><img src="images/Network-Connection-Details-t.jpg" width="376" height="58" border="0" usemap="#Network-Connection-Details-t"></td>
+</tr>
+<tr>
+<td align="left" valign="top" width="21" height="318"><img src="images/Network-Connection-Details-l.jpg" width="21" height="318" border="0" usemap="#Network-Connection-Details-l"></td>
+<td><div style="width: 334; height: 318; overflow: auto;"><img src="images/Network-Connection-Details.jpg" width="363" height="301" border="0"></div></td>
+<td align="left" valign="top"><img src="images/Network-Connection-Details-r.jpg" width="20" height="318" border="0"></td>
+</tr>
+<tr>
+<td width="376" height="66" colspan="3"><img src="images/Network-Connection-Details-b.jpg" width="376" height="66" border="0" usemap="#Network-Connection-Details-b"></td>
+</tr>
+</table>
+
+</div>
+
+<div id="Network-Connections" style="position: absolute; top: 50; left: 100; visibility: hidden; z-index: 1024;" onmousedown="fActiveLayer(this.id);" onContextMenu="return false;"><img src="images/network-connections.jpg" width="581" height="411" border="0" usemap="#Network-Connections"></div>
+
+<div id="clock-pop-up-calendar" style="position: absolute; top: 321; left: 465; visibility: hidden; z-index: 1024;" onClick="fCloseWindow('clock-pop-up-calendar');"><img src="images/clock-pop-up-calendar.jpg" width="336" height="249" border="0"></div>
+
+<div id="Battery-MouseOver" style="position: absolute; top: 498; left: 567; visibility: hidden; z-index: 1024;"><img src="images/Battery-MouseOver.jpg" width="233" height="72" border="0"></div>
+
+<div id="WNetConStat" style="position: absolute; top: 30; left: 200; visibility: hidden; z-index: 1024;" onmousedown="fActiveLayer(this.id);" onContextMenu="return false;"><img src="images/Wireless-Network-Connection-status.jpg" width="377" height="454" border="0" usemap="#WNetConStat"></div>
+
+<div id="LANConStat" style="position: absolute; top: 30; left: 200; visibility: hidden; z-index: 1024;" onmousedown="fActiveLayer(this.id);" onContextMenu="return false;"><img src="images/Local-Area-Connection-status.jpg" width="377" height="454" border="0" usemap="#LANConStat"></div>
+
+<div id="Network" style="position: absolute; top: 30; left: 100; visibility: hidden; z-index: 1024;" onmousedown="fActiveLayer(this.id);" onContextMenu="return false;"><img src="images/Network.jpg" width="616" height="458" border="0" usemap="#Network"></div>
+
+<div id="Computer" style="position: absolute; top: 30; left: 50; visibility: hidden; z-index: 1024;" onmousedown="fActiveLayer(this.id);" onContextMenu="return false;"><img src="images/Computer.jpg" width="684" height="491" border="0" usemap="#Computer"></div>
+
+<div id="User-Accounts" style="position: absolute; top: 30; left: 52; visibility: hidden; z-index: 1024;" width="697" height="508" onmousedown="fActiveLayer(this.id);" onContextMenu="return false;"><img src="images/User-Accounts.jpg" width="697" height="508" border="0" usemap="#User-Accounts"></div>
+
+<div id="UA-User-Accounts" style="position: absolute; top: 30; left: 52; visibility: hidden; z-index: 1024;" onmousedown="fActiveLayer(this.id);" onContextMenu="return false;"><img src="images/UA-User-Accounts.jpg" width="697" height="478" border="0" usemap="#UA-User-Accounts"></div>
+
+<div id="Desktop-Wireless-Popup-Click" style="position: absolute; top: 439; left: 555; visibility: hidden; z-index: 1024;" onmousedown="fActiveLayer(this.id);" onContextMenu="return false;"><img src="images/Desktop-Wireless-Popup-Click.jpg" width="245" height="131" border="0" usemap="#Desktop-Wireless-Popup-Click"></div>
+
+<div id="Desktop-Wireless-Popup" style="position: absolute; top: 491; left: 555; visibility: hidden; z-index: 1024;" onmousedown="fActiveLayer(this.id);" onContextMenu="return false;"><img src="images/Desktop-Wireless-Popup.jpg" width="245" height="79" border="0"></div>
+
+<div id="Connect-to-a-Network" style="position: absolute; top: 54; left: 86; visibility: hidden; z-index: 1024;" onmousedown="fActiveLayer(this.id);" onContextMenu="return false;"><img src="images/Connect-to-a-Network.jpg" width="628" height="456" border="0" usemap="#Connect-to-a-Network"></div>
+
+<div id="Local-Area-Connection-Properties" style="position: absolute; top: 54; left: 200; visibility: hidden; z-index: 1024;" onmousedown="fActiveLayer(this.id);" onContextMenu="return false;"><img src="images/Local-Area-Connection-Properties.jpg" width="377" height="472" border="0" usemap="#Local-Area-Connection-Properties"></div>
+
+<div id="Internet-Protocol-Version-4" style="position: absolute; top: 75; left: 180; visibility: hidden; z-index: 1024;" onmousedown="fActiveLayer(this.id);" onContextMenu="return false;"><div id="IPv4-Gen"><img src="images/Internet-Protocol-Version-4.jpg" width="414" height="459" border="0" usemap="#Internet-Protocol-Version-4"></div><div id="IPv4-AC" style="position: absolute; visibility: hidden;"><img src="images/Internet-Protocol-Version-4-AC.jpg" width="414" height="459" border="0" usemap="#Internet-Protocol-Version-4-AC"></div></div>
+
+<div id="Wireless-Network-Properties" style="position: absolute; top: 40; left: 160; visibility: hidden; z-index: 1024;" onmousedown="fActiveLayer(this.id);" onContextMenu="return false;"><img src="images/Wireless-Network-Properties.jpg" width="389" height="503" border="0" usemap="#Wireless-Network-Properties"></div>
+
+<div id="Internet-Options-Temp-Files" style="position: absolute; top: 47; left: 50; visibility: hidden; z-index: 1024;" onmousedown="fActiveLayer(this.id);" onContextMenu="return false;"><img src="images/Internet-Options-Temp-Files.jpg" width="371" height="471" border="0" usemap="#Internet-Options-Temp-Files"></div>
+
+<div id="Internet-Options-Delete-History" style="position: absolute; top: 47; left: 50; visibility: hidden; z-index: 1024;" onmousedown="fActiveLayer(this.id);" onContextMenu="return false;"><img src="images/Internet-Options-Delete-History.jpg" width="392" height="375" border="0" usemap="#Internet-Options-Delete-History"></div>
+
+
+
+<div id="Internet-Options" style="position: absolute; top: 40; left: 40; visibility: hidden; z-index: 1024;" onmousedown="fActiveLayer(this.id);" onContextMenu="return false;">
+<img id="Internet-Options-General" src="images/Internet-Options-General.jpg" width="413" height="513" border="0" usemap="#Internet-Options-General">
+<img id="Internet-Options-Security" src="images/Internet-Options-Security.jpg" width="413" height="513" border="0" usemap="#Internet-Options-Security" style="display: none;">
+<img id="Internet-Options-Privacy" src="images/Internet-Options-Privacy.jpg" width="413" height="513" border="0" usemap="#Internet-Options-Privacy" style="display: none;">
+<img id="Internet-Options-Content" src="images/Internet-Options-Content.jpg" width="413" height="513" border="0" usemap="#Internet-Options-Content" style="display: none;">
+<img id="Internet-Options-Connections" src="images/Internet-Options-Connections.jpg" width="413" height="513" border="0" usemap="#Internet-Options-Connections" style="display: none;">
+<img id="Internet-Options-Programs" src="images/Internet-Options-Programs.jpg" width="413" height="513" border="0" usemap="#Internet-Options-Programs" style="display: none;">
+<img id="Internet-Options-Advanced" src="images/Internet-Options-Advanced.jpg" width="413" height="513" border="0" usemap="#Internet-Options-Advanced" style="display: none;">
+</div>
+
+
+<div id="Calc" style="position: absolute; top: 40; left: 160; visibility: hidden; z-index: 1024;" onmousedown="fActiveLayer(this.id);" onContextMenu="return false;" onKeyDown="doKeyPress(); return false;">
+<img src="images/calc.jpg" width="270" height="264" border="0" usemap="#calc">
+<div style="position: absolute; top: 51; left: 17;"><input type="text" id="textBox" style="width: 236; height: 20; text-align: right; color: #000000; border: solid 0px #ffffff" maxlength="22"></div>
+</div>
+
+
+<div id="IE" style="position: absolute; top: 0; left: 0; visibility: hidden; z-index: 1024;" onmousedown="fActiveLayer(this.id);">
+
+<div style="position: absolute; top: 26; left: 103; z-index: 10000;"><form onSubmit="submitIeAddress(); return false;"><input type="text" id="IE-Address" value="http://www.google.com/" style="border: 0px solid #000000; width: 385;"></form></div>
+
+<table cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td><img src="images/ie-t.jpg" width="800" height="89" usemap="#IE-Top" border="0"></td>
+</tr>
+<tr>
+<td><iframe id="IEFrame" name="IEFrame" src="http://www.google.com/" style="width: 800; height: 457;"></iframe></td> <!-- document.getElementById('IE-Address').value = -->
+</tr>
+<tr>
+<td><img src="images/ie-b.jpg" width="800" height="24" border="0"></td>
+</tr>
+</table>
+</div>
+
+
+<div id="ControlPanel" style="position: absolute; top: 30; left: 52; visibility: hidden; z-index: 1024;">
+<table cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td colspan="3" width="697" height="63"><img src="images/ControlPanel-t.jpg" width="697" height="63" border="0" usemap="#ControlPanel-t"></td>
+</tr>
+<tr>
+<td width="208" height="414"><img src="images/ControlPanel-l.jpg" id="cphome" width="208" height="414" border="0" usemap="#ControlPanel-l"><img src="images/cpclassic.jpg" id="cpclassic" style="position: absolute; visibility: hidden;" width="208" height="414" border="0" usemap="#cpclassic"><img src="images/CPNetwork-l.jpg" id="CPNetwork-l" style="position: absolute; visibility: hidden;" width="208" height="414"></td>
+<td width="481"><div id="cphome-body" style="width: 481; height: 414; overflow: auto;"><img src="images/ControlPanel.jpg" width="464" height="628" border="0" usemap="#cphome-body"></div><div id="cpclassic-body" style="width: 481; height: 414; overflow: auto; position: absolute; visibility: hidden;"><img src="images/cpclassic-Body.jpg" width="464" height="908" border="0" usemap="#cpclassic-Body"></div><div id="CPNetwork" style="width: 481; height: 414; overflow: auto; position: absolute; visibility: hidden;"><img src="images/CPNetwork.jpg" width="464" height="441" usemap="#CPNetwork"></div></td>
+<td width="8" height="414"><img src="images/ControlPanel-r.jpg" width="8" height="414" border="0"></td>
+</tr>
+<tr>
+<td colspan="3" width="697" height="31"><img src="images/controlpanel-b.jpg" width="697" height="31" border="0"></td>
+</tr>
+</table>
+
+</div>
+
+
+<div id="Computer-Management" style="position: absolute; top: 30; left: 52; visibility: hidden; z-index: 1024;">
+
+<table bgcolor="#ffffff" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td colspan="5" width="708" height="81"><img src="images/Computer-Management-t.jpg" width="708" height="81" border="0" usemap="#Computer-Management-t"></td>
+</tr>
+<tr>
+<td width="9" height="394"><img src="images/Computer-Management-l.jpg" width="9" height="394"></td>
+<td width="193" height="394"><div style="width: 193; height: 394; overflow: auto;"><img src="images/Computer-Management-Menu.jpg" width="317" height="514" border="0" usemap="#Computer-Management-Menu"></div></td>
+<td width="5" height="394"><img src="images/Computer-Management-m.jpg" width="5" height="394"></td>
+<td width="299" height="394"><div id="CMMain"><img src="images/Computer-Management-Main-Content.jpg" width="299" height="394"></div><div id="CMDeviceManager" style="position: absolute; visibility: hidden;"><img src="images/Device-Manager.jpg" width="299" height="394"></div></td>
+<td width="202" height="394"><img src="images/Computer-Management-r.jpg" width="202" height="394"></td>
+</tr>
+<tr>
+<td colspan="5" width="708" height="32"><img src="images/Computer-Management-b.jpg" width="708" height="32"></td>
+</tr>
+</table>
+
+</div>
+
+
+<div id="Computer-Properties" style="position: absolute; top: 30; left: 15; visibility: hidden; z-index: 1024;">
+<table cellspacing="0" cellpadding="0" border="0">
+<tr>
+<td colspan="3" width="765" height="63"><img src="images/Computer-Properties-t.jpg" width="765" height="63" border="0" usemap="#Computer-Properties-t"></td>
+</tr>
+<tr>
+<td width="208" height="371"><img src="images/Computer-Properties-l.jpg" width="208" height="371" border="0" usemap="#Computer-Properties-l"></td>
+<td width="549" height="371"><div style="width: 549; height: 371; overflow: auto;"><img src="images/Computer-Properties.jpg" width="532" height="605"></div></td>
+<td width="8" height="371"><img src="images/Computer-Properties-r.jpg" width="8" height="371"></td>
+</tr>
+<tr>
+<td colspan="3" width="765" height="31"><img src="images/Computer-Properties-b.jpg" width="765" height="31"></td>
+</tr>
+</table>
+</div>
+
+
+<div id="Command" style="position: absolute; top: 50; left: 50; visibility: hidden; z-index: 1024;">
+<table border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td width="677" height="30" colspan=3><img src="images/command-t.jpg" width="677" height="30" border="0" usemap="#command-t"></td>
+</tr>
+<tr>
+<td width="10" height="432"><img src="images/command-l.jpg" width="10" height="432" border="0"></td>
+<td><div style="width: 657; height: 432; overflow: auto;"><img src="images/command.gif" width="640" height="816" border="0"></div></td>
+<td width="10" height="432"><img src="images/command-r.jpg" width="10" height="432" border="0"></td>
+</tr>
+<tr>
+<td width="677" height="10" colspan=3><img src="images/command-b.jpg" width="677" height="10" border="0"></td>
+</tr>
+</table>
+</div>
+
+
+<div id="Notepad" style="position: absolute; top: 50; left: 150; visibility: hidden; z-index: 1024;">
+<table border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td width="567" height="50" colspan=3><img src="images/Notepad-t.jpg" width="567" height="50" border="0" usemap="#Notepad-t"></td>
+</tr>
+<tr>
+<td width="10" height="337"><img src="images/Notepad-l.jpg" width="10" height="337" border="0"></td>
+<td height="335"><textarea style="width: 547; height: 335; border: solid 0px #ffffff; overflow: scroll;"></textarea></td>
+<td width="10" height="337"><img src="images/Notepad-r.jpg" width="10" height="337" border="0"></td>
+</tr>
+<tr>
+<td width="567" height="10" colspan=3><img src="images/Notepad-b.jpg" width="567" height="10" border="0"></td>
+</tr>
+</table>
+</div>
+
+
+
+
+
+
+
+<!-- Google Analytics -->
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-1728610-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+
+</body>
+
+
+<script type='text/javascript' src='rightclick.js'></script>
+<script type='text/javascript' src='window.js'></script>
+<script type='text/javascript' src='Calc.js'></script>
+
+
+<script language="JavaScript">
+
+var dontCloseMenu = 0;
+
+function clearRightClick() {
+vContextMenu = Array();
+}
+
+function startNetworkRightClick() {
+vContextMenu = Array('<b>Open</b>', 'fShowWindow(\'Network\'); fCloseWindow(\'start\');', 'Explore', 'fShowWindow(\'Network\'); fCloseWindow(\'start\');', '-HR-', 'Map Network Drive...', '', 'Disconnect Network Drive...', '', '-HR-', '<div style="width: 100%; height: 100%; cursor: pointer;">Properties</div>', 'fShowWindow(\'Network-Properties\'); fCloseWindow(\'start\');');
+}
+
+function desktopNetworkRightClick() {
+vContextMenu = Array('<b>Open</b>', 'fShowWindow(\'Network\');', 'Explore', 'fShowWindow(\'Network\');', '-HR-', 'Map Network Drive...', '', 'Disconnect Network Drive...', '', '-HR-', 'Create Shortcut', '', 'Delete', '', '-HR-', '<div style="width: 100%; height: 100%; cursor: pointer;">Properties</div>', 'fShowWindow(\'Network-Properties\'); fCloseWindow(\'start\');');
+}
+
+function startDesktopWirelessRightClick() {
+vContextMenu = Array('Disconnect from', '', '-HR-', 'Connect to a network', '','-HR-', 'Turn off activity animation', '','Turn off notification of new networks','','-HR-','Diagnose and repair','','<div style="width: 100%; height: 100%; cursor: pointer;">Network and Sharing Center</div>','fShowWindow(\'Network-Properties\');');
+}
+
+function startDesktopComputerRightClick() {
+vContextMenu = Array('<b>Open</b>', 'fShowWindow(\'Computer\');', 'Explore', 'fShowWindow(\'Computer\'); fCloseWindow(\'start\');', 'Search', '', 'Manage', 'fShowWindow(\'Computer-Management\');', '-HR-', 'Map Network Drive...', '', 'Disconnect Network Drive...', '', '-HR-', 'Create Shortcut', '', 'Delete', '', 'Rename', '', '-HR-', 'Properties', 'fShowWindow(\'Computer-Properties\');');
+}
+
+function startComputerRightClick() {
+vContextMenu = Array('<b>Open</b>', 'fShowWindow(\'Computer\'); fCloseWindow(\'start\');', 'Explore', 'fShowWindow(\'Computer\'); fCloseWindow(\'start\');', 'Search', '', 'Manage', 'fShowWindow(\'Computer-Management\'); fCloseWindow(\'start\');', '-HR-', 'Map Network Drive...', '', 'Disconnect Network Drive...', '', '-HR-', 'Show on Desktop', '', 'Rename', '', '-HR-', 'Properties', 'fShowWindow(\'Computer-Properties\');');
+}
+
+function startNetConWifiRightClick() {
+vContextMenu = Array('Disable', '', 'Connect / Disconnect', '', '<b>Status</b>', 'fShowWindow(\'WNetConStat\');', 'Diagnose', '', '-HR-', 'Bridge Connections', '', '-HR-', 'Create Shortcut', '', '<font color="#aaaaaa">Delete</font>', '', 'Rename', '', '-HR-', 'Properties', 'fShowWindow(\'Local-Area-Connection-Properties\');');
+}
+
+function startNetConLANRightClick() {
+vContextMenu = Array('Disable', '', '<b>Status</b>', 'fShowWindow(\'LANConStat\');', 'Diagnose', '', '-HR-', 'Bridge Connections', '', '-HR-', 'Create Shortcut', '', '<font color="#aaaaaa">Delete</font>', '', 'Rename', '', '-HR-', 'Properties', 'fShowWindow(\'Local-Area-Connection-Properties\');');
+}
+
+function startShutdownMenuLeftClick() {
+dontCloseMenu = 1;
+vContextMenu = Array('Switch User', 'alert(\'HEY!\'); fCloseWindow(\'start\');', 'Log Off', ' fCloseWindow(\'start\');', 'Lock', ' fCloseWindow(\'start\');', '-HR-', 'Restart', ' fCloseWindow(\'start\');', '-HR-', 'Sleep', ' fCloseWindow(\'start\');', 'Hibernate', ' fCloseWindow(\'start\');', 'Shut Down', ' fCloseWindow(\'start\');');
+}
+
+function startWirelessRightClick() {
+vContextMenu = Array('Disconnect', '', 'Status', 'fShowWindow(\'LANConStat\');', 'Properties', 'fShowWindow(\'Wireless-Network-Properties\');', '-HR-', 'Diagnose', '');
+}
+
+function startIEToolsMenuLeftClick() {
+dontCloseMenu = 1;
+vContextMenu = Array('Delete Browsing History...', 'fShowWindow(\'Internet-Options-Delete-History\');', 'Diagnose Connection Promlems', '', '-HR-', 'Pop-up Blocker', '', 'Phishing Filter', '', 'Manage Add-ons', '', '-HR-', 'Work Offline', '', 'Windows Update', '', 'Full Screen', '', 'Menu Bar', '', 'Toolbars', '', '-HR-', 'Sun Java Console', '', '-HR-', 'Internet Options', 'fShowWindow(\'Internet-Options\');');
+}
+
+
+
+function submitIeAddress() {
+a = document.getElementById('IE-Address').value;
+
+if (a.indexOf('http://') == -1) { a = 'http://'+a; }
+
+document.getElementById('IEFrame').src = a;
+document.getElementById('IE-Address').value = a;
+
+}
+
+document.getElementById('Start-Search').value='';
+
+function clickedStartSearch() {
+document.getElementById('Start-Search').style.background='#ffffff';
+}
+
+function leftStartSearch() {
+if (document.getElementById('Start-Search').value == '') {
+document.getElementById('Start-Search').style.background='url(\'images/start-search-bg.jpg\')';
+}
+}
+
+
+function doStartSearch() {
+
+inCmd = document.getElementById('Start-Search').value;
+inCmd = inCmd.toLowerCase();
+
+doneSomething = 0;
+errorMsg = 'Command not recognized\n\nCurrent recognized command(s):\nCmd\nNotepad\nSurvey\n\nnote: Commands are not case sensitive.';
+
+if (inCmd == 'cmd') {
+fShowWindow('Command');
+doneSomething = 1;
+}
+
+if (inCmd == 'notepad') {
+fShowWindow('notepad');
+doneSomething = 1;
+}
+
+if (inCmd == 'survey') {
+document.getElementById('Survey').style.visibility = 'visible';
+doneSomething = 1;
+}
+
+if (doneSomething == 1) {
+document.getElementById('Start-Search').value = '';
+document.getElementById('Start-Search').style.background='url(\'images/start-search-bg.jpg\')';
+fCloseWindow('start');
+}
+
+if (doneSomething == 0) { alert(errorMsg); }
+}
+
+
+
+function updateTime() {
+
+
+curTime = new Date();
+T = 'AM';
+outTime = '';
+
+H = curTime.getHours();
+if (H > 12) {
+H = H - 12;
+T = 'PM';
+}
+
+H1 = H / 10;
+H1 = Math.floor(H1);
+
+H2 = H - (H1 * 10);
+
+if (H2 == 0) {
+H1 = 1;
+H2 = 2;
+}
+
+
+M = curTime.getMinutes();
+
+M1 = M / 10;
+M1 = Math.floor(M1);
+
+M2 = M - (M1 * 10);
+
+
+if (H1 > 0) { outTime = outTime + '<img src="images/' + H1 + '.jpg" width="6" height="9">'; }
+
+outTime = outTime + '<img src="images/' + H2 + '.jpg" width="6" height="9">';
+outTime = outTime + '<img src="images/colon-Clock.jpg" width="3" height="9">';
+outTime = outTime + '<img src="images/' + M1 + '.jpg" width="6" height="9">';
+outTime = outTime + '<img src="images/' + M2 + '.jpg" width="6" height="9">';
+outTime = outTime + '<img src="images/' + T + '.jpg" width="21" height="9">';
+
+
+
+document.getElementById('Clock-Time').innerHTML = outTime;
+
+}
+
+
+var ClockInt;
+updateTime();
+
+ClockInt = window.setInterval('updateTime()', 10000);
+
+
+function showAlt(inSelect) {
+
+if (inSelect == 0) {
+document.getElementById('cphome').style.visibility = 'hidden';
+document.getElementById('cphome').style.position = 'absolute';
+document.getElementById('cpclassic').style.visibility = '';
+document.getElementById('cpclassic').style.position = '';
+
+document.getElementById('cphome-body').style.visibility = 'hidden';
+document.getElementById('cphome-body').style.position = 'absolute';
+document.getElementById('cpclassic-body').style.visibility = '';
+document.getElementById('cpclassic-body').style.position = '';
+}
+
+if (inSelect == 1) {
+document.getElementById('cpclassic').style.visibility = 'hidden';
+document.getElementById('cpclassic').style.position = 'absolute';
+document.getElementById('cphome').style.visibility = '';
+document.getElementById('cphome').style.position = '';
+
+document.getElementById('cpclassic-body').style.visibility = 'hidden';
+document.getElementById('cpclassic-body').style.position = 'absolute';
+document.getElementById('cphome-body').style.visibility = '';
+document.getElementById('cphome-body').style.position = '';
+}
+
+if (inSelect == 2) {
+document.getElementById('CMMain').style.visibility = 'hidden';
+document.getElementById('CMMain').style.position = 'absolute';
+document.getElementById('CMDeviceManager').style.visibility = '';
+document.getElementById('CMDeviceManager').style.position = '';
+}
+
+if (inSelect == 3) {
+document.getElementById('CMDeviceManager').style.visibility = 'hidden';
+document.getElementById('CMDeviceManager').style.position = 'absolute';
+document.getElementById('CMMain').style.visibility = '';
+document.getElementById('CMMain').style.position = '';
+}
+
+if (inSelect == 4) {
+document.getElementById('IPv4-Gen').style.visibility = 'hidden';
+document.getElementById('IPv4-Gen').style.position = 'absolute';
+document.getElementById('IPv4-AC').style.visibility = '';
+document.getElementById('IPv4-AC').style.position = '';
+}
+
+if (inSelect == 5) {
+document.getElementById('IPv4-AC').style.visibility = 'hidden';
+document.getElementById('IPv4-AC').style.position = 'absolute';
+document.getElementById('IPv4-Gen').style.visibility = '';
+document.getElementById('IPv4-Gen').style.position = '';
+}
+
+if (inSelect == 6) {
+document.getElementById('cphome').style.visibility = 'hidden';
+document.getElementById('cphome').style.position = 'absolute';
+document.getElementById('CPNetwork-l').style.visibility = '';
+document.getElementById('CPNetwork-l').style.position = '';
+
+document.getElementById('cphome-body').style.visibility = 'hidden';
+document.getElementById('cphome-body').style.position = 'absolute';
+document.getElementById('CPNetwork').style.visibility = '';
+document.getElementById('CPNetwork').style.position = '';
+}
+
+if (inSelect == 7) {
+document.getElementById('CPNetwork-l').style.visibility = 'hidden';
+document.getElementById('CPNetwork-l').style.position = 'absolute';
+document.getElementById('CPNetwork').style.visibility = 'hidden';
+document.getElementById('CPNetwork').style.position = 'absolute';
+
+document.getElementById('cpclassic').style.visibility = 'hidden';
+document.getElementById('cpclassic').style.position = 'absolute';
+document.getElementById('cpclassic-body').style.visibility = 'hidden';
+document.getElementById('cpclassic-body').style.position = 'absolute';
+
+document.getElementById('cphome').style.visibility = '';
+document.getElementById('cphome').style.position = '';
+document.getElementById('cphome-body').style.visibility = '';
+document.getElementById('cphome-body').style.position = '';
+
+
+}
+
+}
+
+
+function doInternetOptionSwitch(inOpt) {
+
+document.getElementById('Internet-Options-General').style.display = 'none';
+document.getElementById('Internet-Options-Security').style.display = 'none';
+document.getElementById('Internet-Options-Privacy').style.display = 'none';
+document.getElementById('Internet-Options-Content').style.display = 'none';
+document.getElementById('Internet-Options-Connections').style.display = 'none';
+document.getElementById('Internet-Options-Programs').style.display = 'none';
+document.getElementById('Internet-Options-Advanced').style.display = 'none';
+
+if (inOpt == 1) { document.getElementById('Internet-Options-General').style.display = ''; }
+if (inOpt == 2) { document.getElementById('Internet-Options-Security').style.display = ''; }
+if (inOpt == 3) { document.getElementById('Internet-Options-Privacy').style.display = ''; }
+if (inOpt == 4) { document.getElementById('Internet-Options-Content').style.display = ''; }
+if (inOpt == 5) { document.getElementById('Internet-Options-Connections').style.display = ''; }
+if (inOpt == 6) { document.getElementById('Internet-Options-Programs').style.display = ''; }
+if (inOpt == 7) { document.getElementById('Internet-Options-Advanced').style.display = ''; }
+
+
+}
+
+
+
+
+
+</script>
+
+
+
+
+<MAP NAME="Desktop">
+
+<!-- Start Button -->
+<AREA href="#"
+onClick="fShowWindow('start');"
+SHAPE=RECT COORDS="0,566,60,600">
+
+<!-- Computer Icon Button -->
+<AREA href="#"
+onMouseOver="startDesktopComputerRightClick(); return false;"
+onMouseOut="clearRightClick();"
+onDblClick="fShowWindow('Computer');"
+SHAPE=RECT COORDS="14,0,65,70">
+
+<!-- Network Icon Button -->
+<AREA href="#"
+onMouseOver="desktopNetworkRightClick(); return false;"
+onMouseOut="clearRightClick();"
+onDblClick="fShowWindow('Network');"
+SHAPE=RECT COORDS="14,233,65,296">
+
+<!-- Clock -->
+<AREA href="#"
+onClick="fShowWindow('clock-pop-up-calendar');"
+SHAPE=RECT COORDS="734,572,790,600">
+
+<!-- Wireless -->
+<AREA href="#"
+onMouseOver="fShowWindow('Desktop-Wireless-Popup'); startDesktopWirelessRightClick(); return false;"
+onMouseOut="clearRightClick(); fCloseWindow('Desktop-Wireless-Popup');"
+onClick="fCloseWindow('Desktop-Wireless-Popup'); fShowWindow('Desktop-Wireless-Popup-Click');"
+SHAPE=RECT COORDS="696,572,713,600">
+
+<!-- Battery -->
+<AREA href="#"
+onMouseOver="fShowWindow('Battery-MouseOver');"
+onMouseOut="fCloseWindow('Battery-MouseOver');"
+SHAPE=RECT COORDS="677,572,694,600">
+
+<!-- Background (To close Start Button) -->
+<AREA
+onClick="fCloseWindow('start'); fCloseWindow('clock-pop-up-calendar'); fCloseWindow('Desktop-Wireless-Popup-Click');"
+SHAPE=RECT COORDS="0,0,800,600">
+
+</MAP>
+
+
+<MAP NAME="Start">
+
+
+<!-- Start Button for close -->
+<AREA
+onClick="fCloseWindow('start');"
+SHAPE=RECT COORDS="0,530,410,564">
+
+<!-- IE Button -->
+<AREA href="#"
+onClick="fShowWindow('IE'); fCloseWindow('start');"
+SHAPE=RECT COORDS="9,9,258,48">
+
+<!-- Notepad Button -->
+<AREA href="#"
+onClick="fShowWindow('Notepad'); fCloseWindow('start');"
+SHAPE=RECT COORDS="9,170,258,208">
+
+<!-- Command Button -->
+<AREA href="#"
+onClick="fShowWindow('Command'); fCloseWindow('start');"
+SHAPE=RECT COORDS="9,245,258,277">
+
+<!-- Computer Button -->
+<AREA href="#"
+onMouseOver="startComputerRightClick(); return false;"
+onMouseOut="clearRightClick();"
+onClick="fShowWindow('Computer'); fCloseWindow('start');"
+SHAPE=RECT COORDS="268,286,399,323">
+
+<!-- Network Button -->
+<AREA href="#"
+onMouseOver="startNetworkRightClick(); return false;"
+onMouseOut="clearRightClick();"
+onClick="fShowWindow('Network'); fCloseWindow('start');"
+SHAPE=RECT COORDS="268,323,399,355">
+
+<!-- Connect To Button -->
+<AREA href="#"
+onClick="fShowWindow('Connect-to-a-Network'); fCloseWindow('start');"
+SHAPE=RECT COORDS="268,356,399,388">
+
+<!-- Control Panel Button -->
+<AREA href="#"
+onClick="fShowWindow('ControlPanel'); fCloseWindow('Start');"
+SHAPE=RECT COORDS="261,395,403,430">
+
+<!-- Shut Down Menu -->
+<AREA href="#"
+onClick="startShutdownMenuLeftClick(); rcContextMenu(); return false;"
+onMouseOver="startShutdownMenuLeftClick();"
+onMouseOut="clearRightClick();"
+SHAPE=RECT COORDS="372,505,392,524">
+
+
+</MAP>
+
+
+<MAP NAME="Network-Properties-t">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Network-Properties');"
+SHAPE=RECT COORDS="732,10,759,24">
+
+<!-- Control Panel Button -->
+<AREA href="#"
+onClick="fShowWindow('ControlPanel'); fCloseWindow('Network-Properties');"
+SHAPE=RECT COORDS="110,35,200,52">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Network-Properties', 1);"
+SHAPE=RECT COORDS="0,0,770,31">
+
+</MAP>
+
+
+<MAP NAME="Network-Properties-l">
+
+<!-- Manage Network Connections -->
+<AREA href="#"
+onClick="fShowWindow('Network-Connections');"
+SHAPE=RECT COORDS="0,137,207,159">
+
+</MAP>
+
+
+<MAP NAME="Network-Properties">
+
+<!-- Manage Network Connections -->
+<AREA href="#"
+style="cursor: pointer;"
+onClick="fShowWindow('WNetConStat');"
+SHAPE=RECT COORDS="455,241,520,249">
+
+</MAP>
+
+
+<MAP NAME="Network-Connections">
+
+<!-- LANConStat Button -->
+<AREA href="#"
+onDblClick="fShowWindow('LANConStat');"
+onMouseOver="startNetConLANRightClick(); return false;"
+onMouseOut="clearRightClick();"
+SHAPE=RECT COORDS="8,140,236,189">
+
+<!-- WNetConStat Button -->
+<AREA href="#"
+onDblClick="fShowWindow('WNetConStat');"
+onMouseOver="startNetConWifiRightClick(); return false;"
+onMouseOut="clearRightClick();"
+SHAPE=RECT COORDS="237,140,455,189">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Network-Connections');"
+SHAPE=RECT COORDS="543,10,570,24">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Network-Connections', 1);"
+SHAPE=RECT COORDS="0,0,581,31">
+
+</MAP>
+
+
+<MAP NAME="Network-Connection-Details-t">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Network-Connection-Details');"
+SHAPE=RECT COORDS="338,10,365,24">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Network-Connection-Details', 1);"
+SHAPE=RECT COORDS="0,0,581,31">
+
+</MAP>
+
+
+<MAP NAME="Network-Connection-Details-b">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Network-Connection-Details');"
+SHAPE=RECT COORDS="285,22,357,42">
+
+</MAP>
+
+
+<MAP NAME="WNetConStat">
+
+<!-- Details Button -->
+<AREA href="#"
+onClick="fShowWindow('Network-Connection-Details');"
+SHAPE=RECT COORDS="45,230,117,250">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('WNetConStat');"
+SHAPE=RECT COORDS="339,10,366,24">
+
+<!-- Bottom Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('WNetConStat');"
+SHAPE=RECT COORDS="289,417,361,437">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('WNetConStat', 1);"
+SHAPE=RECT COORDS="0,0,377,31">
+
+</MAP>
+
+
+<MAP NAME="LANConStat">
+
+<!-- Details Button -->
+<AREA href="#"
+onClick="fShowWindow('Network-Connection-Details');"
+SHAPE=RECT COORDS="45,193,117,213">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('LANConStat');"
+SHAPE=RECT COORDS="339,10,366,24">
+
+<!-- Bottom Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('LANConStat');"
+SHAPE=RECT COORDS="289,417,361,437">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('LANConStat', 1);"
+SHAPE=RECT COORDS="0,0,377,31">
+
+</MAP>
+
+
+<MAP NAME="Network">
+
+<!-- Network and Sharing Center Button -->
+<AREA href="#"
+onClick="fShowWindow('Network-Properties');"
+SHAPE=RECT COORDS="194,64,377,91">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Network');"
+SHAPE=RECT COORDS="578,10,605,24">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Network', 1);"
+SHAPE=RECT COORDS="0,0,616,31">
+
+</MAP>
+
+
+<MAP NAME="IE-Top">
+
+<!-- Tools Button -->
+<AREA href="#"
+onClick="startIEToolsMenuLeftClick(); rcContextMenu(); return false;"
+onMouseOut="clearRightClick();"
+SHAPE=RECT COORDS="713,55,783,84">
+
+<!-- Browser Back Button -->
+<AREA href="#"
+onClick="history.back();"
+SHAPE=RECT COORDS="1,22,29,50">
+
+<!-- Browser Forward Button -->
+<AREA href="#"
+onClick="history.forward();"
+SHAPE=RECT COORDS="30,22,57,50">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('IE');"
+SHAPE=RECT COORDS="770,2,797,16">
+
+</map>
+
+
+<MAP NAME="ControlPanel-t">
+
+<!-- Control Panel Button -->
+<AREA href="#"
+onClick="showAlt(7);"
+SHAPE=RECT COORDS="110,34,199,53">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('ControlPanel');"
+SHAPE=RECT COORDS="659,10,686,24">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('ControlPanel', 1);"
+SHAPE=RECT COORDS="0,0,697,31">
+
+</map>
+
+
+<MAP NAME="ControlPanel-l">
+
+<!-- Classic Button -->
+<AREA href="#"
+onClick="showAlt(0);"
+SHAPE=RECT COORDS="0,39,208,49">
+
+</map>
+
+
+<MAP NAME="cpclassic">
+
+<!-- CPHome Button -->
+<AREA href="#"
+onClick="showAlt(1)"
+SHAPE=RECT COORDS="0,16,208,30">
+
+</map>
+
+
+<MAP NAME="cpclassic-Body">
+
+<!-- Network and Sharing Button -->
+<AREA href="#"
+onDblClick="fShowWindow('Network-Properties'); fCloseWindow('ControlPanel');"
+SHAPE=RECT COORDS="69,313,153,405">
+
+<!-- System -->
+<AREA href="#"
+onClick="fShowWindow('Computer-Properties'); fCloseWindow('ControlPanel');"
+SHAPE=RECT COORDS="0,604,75,700">
+
+<!-- Users Button -->
+<AREA href="#"
+onDblClick="fShowWindow('User-Accounts'); fCloseWindow('ControlPanel');"
+SHAPE=RECT COORDS="302,604,380,700">
+
+</map>
+
+
+<MAP NAME="cphome-body">
+
+<!-- Add Users Button -->
+<AREA href="#"
+onClick="alert('Place holder for \'Add or remove user accounts\'\nStill working on it.');"
+SHAPE=RECT COORDS="286,43,419,76">
+
+<!-- Users Button -->
+<AREA href="#"
+onClick="fShowWindow('User-Accounts'); fCloseWindow('ControlPanel');"
+SHAPE=RECT COORDS="231,21,449,76">
+
+<!-- Add Users Button -->
+<AREA href="#"
+onClick="fShowWindow('Network-Properties'); fCloseWindow('ControlPanel');"
+SHAPE=RECT COORDS="69,279,202,382">
+
+<!-- Network and Internet Button -->
+<AREA href="#"
+onClick="showAlt(6);"
+SHAPE=RECT COORDS="9,232,227,334">
+
+</map>
+
+
+<MAP NAME="Computer">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Computer');"
+SHAPE=RECT COORDS="646,10,673,24">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Computer', 1);"
+SHAPE=RECT COORDS="0,0,684,31">
+
+</map>
+
+
+<MAP NAME="UA-User-Accounts">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('UA-User-Accounts');"
+SHAPE=RECT COORDS="659,10,686,24">
+
+<!-- Control Panel Button -->
+<AREA href="#"
+onClick="fShowWindow('ControlPanel'); fCloseWindow('UA-User-Accounts');"
+SHAPE=RECT COORDS="110,35,200,52">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('UA-User-Accounts', 1);"
+SHAPE=RECT COORDS="0,0,697,31">
+
+</map>
+
+
+<MAP NAME="User-Accounts">
+
+<!-- Control Panel Button -->
+<AREA href="#"
+onClick="fShowWindow('ControlPanel'); fCloseWindow('User-Accounts');"
+SHAPE=RECT COORDS="110,35,200,52">
+
+<!-- UA-User Accounts Button -->
+<AREA href="#"
+onClick="fShowWindow('UA-User-Accounts'); fCloseWindow('User-Accounts');"
+SHAPE=RECT COORDS="223,81,678,148">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('User-Accounts');"
+SHAPE=RECT COORDS="659,10,686,24">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('User-Accounts', 1);"
+SHAPE=RECT COORDS="0,0,697,31">
+
+</map>
+
+
+<MAP NAME="Computer-Management-t">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Computer-Management');"
+SHAPE=RECT COORDS="670,10,697,24">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Computer-Management', 1);"
+SHAPE=RECT COORDS="0,0,708,31">
+
+</map>
+
+
+<MAP NAME="Computer-Management-Menu">
+
+<!-- NOTEBOOK Button -->
+<AREA href="#"
+onClick="showAlt(3);"
+SHAPE=RECT COORDS="0,0,200,17">
+
+<!-- Device Manager Button -->
+<AREA href="#"
+onClick="showAlt(2);"
+SHAPE=RECT COORDS="41,361,311,376">
+
+</map>
+
+
+<MAP NAME="Computer-Properties-t">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Computer-Properties');"
+SHAPE=RECT COORDS="727,10,754,24">
+
+<!-- Control Panel Button -->
+<AREA href="#"
+onClick="fShowWindow('ControlPanel'); fCloseWindow('Computer-Properties');"
+SHAPE=RECT COORDS="110,35,200,52">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Computer-Properties', 1);"
+SHAPE=RECT COORDS="0,0,765,31">
+
+</map>
+
+<MAP NAME="Computer-Properties-l">
+
+<!-- Device Manager Button -->
+<AREA href="#"
+onClick="showAlt(2); fShowWindow('Computer-Management'); fCloseWindow('Computer-Properties');"
+SHAPE=RECT COORDS="8,37,207,58">
+
+</map>
+
+
+<MAP NAME="Desktop-Wireless-Popup-Click">
+
+<!-- Connect to a Network Button -->
+<AREA href="#"
+onClick="fShowWindow('Connect-to-a-Network'); fCloseWindow('Desktop-Wireless-Popup-Click');"
+SHAPE=RECT COORDS="45,90,202,104">
+
+<!-- Netowrk and Sharing Button -->
+<AREA href="#"
+onClick="fShowWindow('Network-Properties'); fCloseWindow('Desktop-Wireless-Popup-Click');"
+SHAPE=RECT COORDS="45,112,202,120">
+
+</map>
+
+
+<MAP NAME="Connect-to-a-Network">
+
+
+<!-- Wireless Button -->
+<AREA href="#"
+onMouseOver="startWirelessRightClick(); return false;"
+onMouseOut="clearRightClick();"
+SHAPE=RECT COORDS="48,243,581,298">
+
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Connect-to-a-Network');"
+SHAPE=RECT COORDS="590,10,617,24">
+
+
+<!-- Cancel Button -->
+<AREA href="#"
+onClick="fCloseWindow('Connect-to-a-Network');"
+SHAPE=RECT COORDS="543,417,608,437">
+
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Connect-to-a-Network', 1);"
+SHAPE=RECT COORDS="0,0,628,31">
+
+</map>
+
+
+<MAP NAME="Local-Area-Connection-Properties">
+
+<!-- Internet Protocol Version 4 -->
+<AREA href="#"
+onDblClick="fShowWindow('Internet-Protocol-Version-4');"
+SHAPE=RECT COORDS="70,234,259,250">
+
+<!-- Internet Protocol Version 4 -->
+<AREA href="#"
+onClick="fShowWindow('Internet-Protocol-Version-4');"
+SHAPE=RECT COORDS="249,312,347,332">
+
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Local-Area-Connection-Properties');"
+SHAPE=RECT COORDS="339,10,366,24">
+
+
+<!-- OK and Cancel Buttons -->
+<AREA href="#"
+onClick="fCloseWindow('Local-Area-Connection-Properties');"
+SHAPE=RECT COORDS="208,435,361,455">
+
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Local-Area-Connection-Properties', 1);"
+SHAPE=RECT COORDS="0,0,377,31">
+
+</map>
+
+
+<MAP NAME="Internet-Protocol-Version-4">
+
+
+<!-- Alternate Configuration Button -->
+<AREA href="#"
+onClick="showAlt(4);"
+SHAPE=RECT COORDS="67,37,187,54">
+
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Protocol-Version-4');"
+SHAPE=RECT COORDS="376,10,403,24">
+
+
+<!-- OK and Cancel Buttons -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Protocol-Version-4');"
+SHAPE=RECT COORDS="245,422,398,442">
+
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Internet-Protocol-Version-4', 1);"
+SHAPE=RECT COORDS="0,0,414,31">
+
+</map>
+
+
+<MAP NAME="Internet-Protocol-Version-4-AC">
+
+
+<!-- General Button -->
+<AREA href="#"
+onClick="showAlt(5);"
+SHAPE=RECT COORDS="16,37,62,54">
+
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Protocol-Version-4');"
+SHAPE=RECT COORDS="376,10,403,24">
+
+
+<!-- OK and Cancel Buttons -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Protocol-Version-4');"
+SHAPE=RECT COORDS="245,422,398,442">
+
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Internet-Protocol-Version-4', 1);"
+SHAPE=RECT COORDS="0,0,414,31">
+
+</map>
+
+
+<MAP NAME="Command-t">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Command');"
+SHAPE=RECT COORDS="650,10,666,24">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Command', 1);"
+SHAPE=RECT COORDS="8,8,668,26">
+
+</map>
+
+
+<MAP NAME="CPNetwork">
+
+<!-- Connect To Button -->
+<AREA href="#"
+onClick="fCloseWindow('Connect-to-a-Network');"
+SHAPE=RECT COORDS="231,44,365,57">
+
+</map>
+
+
+<MAP NAME="Notepad-t">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Notepad');"
+SHAPE=RECT COORDS="529,10,557,24">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Notepad', 1);"
+SHAPE=RECT COORDS="0,0,565,27">
+
+</map>
+
+
+<MAP NAME="Wireless-Network-Properties">
+
+<!-- Ok/Cancel Button -->
+<AREA href="#"
+onClick="fCloseWindow('Wireless-Network-Properties');"
+SHAPE=RECT COORDS="220,466,373,486">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Wireless-Network-Properties');"
+SHAPE=RECT COORDS="351,10,478,24">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Wireless-Network-Properties', 1);"
+SHAPE=RECT COORDS="0,0,389,27">
+
+</map>
+
+
+<MAP NAME="Internet-Options-Temp-Files">
+
+<!-- Ok/Cancel Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Options-Temp-Files');"
+SHAPE=RECT COORDS="184,435,351,455">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Options-Temp-Files');"
+SHAPE=RECT COORDS="338,5,364,19">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Internet-Options-Temp-Files', 1);"
+SHAPE=RECT COORDS="0,0,371,22">
+
+</map>
+
+
+<MAP NAME="Internet-Options-Delete-History">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Options-Delete-History');"
+SHAPE=RECT COORDS="285,333,372,356">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Options-Delete-History');"
+SHAPE=RECT COORDS="359,5,386,19">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Internet-Options-Delete-History', 1);"
+SHAPE=RECT COORDS="0,0,392,22">
+
+</map>
+
+
+
+<MAP NAME="Internet-Options-General">
+
+<!-- Browsing History Delete Button -->
+<AREA href="#"
+onClick="fShowWindow('Internet-Options-Delete-History');"
+SHAPE=RECT COORDS="203,245,287,265">
+
+<!-- Browsing History Settings Button -->
+<AREA href="#"
+onClick="fShowWindow('Internet-Options-Temp-Files');"
+SHAPE=RECT COORDS="296,245,380,265">
+
+<!-- General Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(1);"
+SHAPE=RECT COORDS="11,32,59,49">
+
+<!-- Security Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(2);"
+SHAPE=RECT COORDS="60,32,110,49">
+
+<!-- Privacy Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(3);"
+SHAPE=RECT COORDS="111,32,157,49">
+
+<!-- Content Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(4);"
+SHAPE=RECT COORDS="158,32,208,49">
+
+<!-- Connections Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(5);"
+SHAPE=RECT COORDS="209,32,279,49">
+
+<!-- Programs Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(6);"
+SHAPE=RECT COORDS="280,32,336,49">
+
+<!-- Advanced Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(7);"
+SHAPE=RECT COORDS="337,32,394,49">
+
+<!-- Ok/Cancel Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Options');"
+SHAPE=RECT COORDS="168,481,402,501">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Options');"
+SHAPE=RECT COORDS="380,5,407,19">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Internet-Options', 1);"
+SHAPE=RECT COORDS="0,0,413,27">
+
+</map>
+
+
+<MAP NAME="Internet-Options-Security">
+
+<!-- General Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(1);"
+SHAPE=RECT COORDS="11,32,59,49">
+
+<!-- Security Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(2);"
+SHAPE=RECT COORDS="60,32,110,49">
+
+<!-- Privacy Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(3);"
+SHAPE=RECT COORDS="111,32,157,49">
+
+<!-- Content Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(4);"
+SHAPE=RECT COORDS="158,32,208,49">
+
+<!-- Connections Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(5);"
+SHAPE=RECT COORDS="209,32,279,49">
+
+<!-- Programs Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(6);"
+SHAPE=RECT COORDS="280,32,336,49">
+
+<!-- Advanced Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(7);"
+SHAPE=RECT COORDS="337,32,394,49">
+
+<!-- Ok/Cancel Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Options');"
+SHAPE=RECT COORDS="168,481,402,501">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Options');"
+SHAPE=RECT COORDS="380,5,407,19">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Internet-Options', 1);"
+SHAPE=RECT COORDS="0,0,413,27">
+
+</map>
+
+
+<MAP NAME="Internet-Options-Privacy">
+
+<!-- General Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(1);"
+SHAPE=RECT COORDS="11,32,59,49">
+
+<!-- Security Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(2);"
+SHAPE=RECT COORDS="60,32,110,49">
+
+<!-- Privacy Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(3);"
+SHAPE=RECT COORDS="111,32,157,49">
+
+<!-- Content Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(4);"
+SHAPE=RECT COORDS="158,32,208,49">
+
+<!-- Connections Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(5);"
+SHAPE=RECT COORDS="209,32,279,49">
+
+<!-- Programs Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(6);"
+SHAPE=RECT COORDS="280,32,336,49">
+
+<!-- Advanced Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(7);"
+SHAPE=RECT COORDS="337,32,394,49">
+
+<!-- Ok/Cancel Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Options');"
+SHAPE=RECT COORDS="168,481,402,501">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Options');"
+SHAPE=RECT COORDS="380,5,407,19">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Internet-Options', 1);"
+SHAPE=RECT COORDS="0,0,413,27">
+
+</map>
+
+
+<MAP NAME="Internet-Options-Content">
+
+<!-- General Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(1);"
+SHAPE=RECT COORDS="11,32,59,49">
+
+<!-- Security Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(2);"
+SHAPE=RECT COORDS="60,32,110,49">
+
+<!-- Privacy Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(3);"
+SHAPE=RECT COORDS="111,32,157,49">
+
+<!-- Content Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(4);"
+SHAPE=RECT COORDS="158,32,208,49">
+
+<!-- Connections Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(5);"
+SHAPE=RECT COORDS="209,32,279,49">
+
+<!-- Programs Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(6);"
+SHAPE=RECT COORDS="280,32,336,49">
+
+<!-- Advanced Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(7);"
+SHAPE=RECT COORDS="337,32,394,49">
+
+<!-- Ok/Cancel Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Options');"
+SHAPE=RECT COORDS="168,481,402,501">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Options');"
+SHAPE=RECT COORDS="380,5,407,19">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Internet-Options', 1);"
+SHAPE=RECT COORDS="0,0,413,27">
+
+</map>
+
+
+<MAP NAME="Internet-Options-Connections">
+
+<!-- General Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(1);"
+SHAPE=RECT COORDS="11,32,59,49">
+
+<!-- Security Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(2);"
+SHAPE=RECT COORDS="60,32,110,49">
+
+<!-- Privacy Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(3);"
+SHAPE=RECT COORDS="111,32,157,49">
+
+<!-- Content Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(4);"
+SHAPE=RECT COORDS="158,32,208,49">
+
+<!-- Connections Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(5);"
+SHAPE=RECT COORDS="209,32,279,49">
+
+<!-- Programs Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(6);"
+SHAPE=RECT COORDS="280,32,336,49">
+
+<!-- Advanced Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(7);"
+SHAPE=RECT COORDS="337,32,394,49">
+
+<!-- Ok/Cancel Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Options');"
+SHAPE=RECT COORDS="168,481,402,501">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Options');"
+SHAPE=RECT COORDS="380,5,407,19">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Internet-Options', 1);"
+SHAPE=RECT COORDS="0,0,413,27">
+
+</map>
+
+
+<MAP NAME="Internet-Options-Programs">
+
+<!-- General Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(1);"
+SHAPE=RECT COORDS="11,32,59,49">
+
+<!-- Security Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(2);"
+SHAPE=RECT COORDS="60,32,110,49">
+
+<!-- Privacy Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(3);"
+SHAPE=RECT COORDS="111,32,157,49">
+
+<!-- Content Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(4);"
+SHAPE=RECT COORDS="158,32,208,49">
+
+<!-- Connections Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(5);"
+SHAPE=RECT COORDS="209,32,279,49">
+
+<!-- Programs Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(6);"
+SHAPE=RECT COORDS="280,32,336,49">
+
+<!-- Advanced Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(7);"
+SHAPE=RECT COORDS="337,32,394,49">
+
+<!-- Ok/Cancel Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Options');"
+SHAPE=RECT COORDS="168,481,402,501">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Options');"
+SHAPE=RECT COORDS="380,5,407,19">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Internet-Options', 1);"
+SHAPE=RECT COORDS="0,0,413,27">
+
+</map>
+
+
+<MAP NAME="Internet-Options-Advanced">
+
+<!-- General Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(1);"
+SHAPE=RECT COORDS="11,32,59,49">
+
+<!-- Security Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(2);"
+SHAPE=RECT COORDS="60,32,110,49">
+
+<!-- Privacy Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(3);"
+SHAPE=RECT COORDS="111,32,157,49">
+
+<!-- Content Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(4);"
+SHAPE=RECT COORDS="158,32,208,49">
+
+<!-- Connections Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(5);"
+SHAPE=RECT COORDS="209,32,279,49">
+
+<!-- Programs Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(6);"
+SHAPE=RECT COORDS="280,32,336,49">
+
+<!-- Advanced Tab -->
+<AREA href="#"
+onClick="doInternetOptionSwitch(7);"
+SHAPE=RECT COORDS="337,32,394,49">
+<!-- Ok/Cancel Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Options');"
+SHAPE=RECT COORDS="168,481,402,501">
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Internet-Options');"
+SHAPE=RECT COORDS="380,5,407,19">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Internet-Options', 1);"
+SHAPE=RECT COORDS="0,0,413,27">
+
+</map>
+
+
+<MAP NAME="calc">
+
+<!-- Backspace Button -->
+<AREA href="#"
+SHAPE=RECT COORDS="63,86,123,112">
+
+<!-- CE Button -->
+<AREA href="#"
+SHAPE=RECT COORDS="129,86,188,112">
+
+<!-- C Button -->
+<AREA href="#"
+SHAPE=RECT COORDS="194,86,253,112">
+
+<!-- MC Button -->
+<AREA href="#"
+SHAPE=RECT COORDS="17,122,50,148">
+
+<!-- MR Button -->
+<AREA href="#"
+SHAPE=RECT COORDS="17,155,50,181">
+
+<!-- MS Button -->
+<AREA href="#"
+SHAPE=RECT COORDS="17,187,50,213">
+
+<!-- M+ Button -->
+<AREA href="#"
+SHAPE=RECT COORDS="17,220,50,246">
+
+<!-- 0 Button -->
+<AREA href="#"
+SHAPE=RECT COORDS="63,220,96,246">
+
+<!-- 1 Button -->
+<AREA href="#"
+SHAPE=RECT COORDS="63,187,96,213">
+
+<!-- 2 Button -->
+<AREA href="#"
+SHAPE=RECT COORDS="108,187,135,213">
+
+<!-- 3 Button -->
+<area onClick="alert('3');" shape="rect" coords="141,187,174,213" href="#">
+
+<!-- 4 Button -->
+<area onClick="alert('4');" shape="rect" coords="63,155,96,181" href="#">
+
+<!-- 5 Button -->
+<area onClick="alert('5');" shape="rect" coords="102,155,135,181" href="#">
+
+<!-- 6 Button -->
+<area onClick="alert('6');" shape="rect" coords="141,155,174,181" href="#">
+
+<!-- 7 Button -->
+<area onClick="alert('7');" shape="rect" coords="63,122,96,148" href="#">
+
+<!-- 8 Button -->
+<area onClick="alert('8');" shape="rect" coords="102,122,135,148" href="#">
+
+<!-- 9 Button -->
+<area onClick="alert('9');" shape="rect" coords="141,122,174,148" href="#">
+
+<!-- +- Button -->
+<area onClick="alert('+/-');" shape="rect" coords="102,220,135,246" href="#">
+
+<!-- . Button -->
+<area onClick="alert('.');" shape="rect" coords="141,220,174,246" href="#">
+
+<!-- + Button -->
+<area onClick="alert('+');" shape="rect" coords="180,220,213,246" href="#">
+
+<!-- - Button -->
+<area onClick="alert('-');" shape="rect" coords="180,187,213,213" href="#">
+
+<!-- * Button -->
+<area onClick="alert('*');" shape="rect" coords="180,155,213,181" href="#">
+
+<!-- / Button -->
+<area onClick="alert('/');" shape="rect" coords="180,122,213,148" href="#">
+
+<!-- = Button -->
+<area onClick="alert('=');" shape="rect" coords="219,220,252,246" href="#">
+
+<!-- sqrt Button -->
+<area onClick="alert('sqrt');" shape="rect" coords="219,122,252,148" href="#">
+
+<!-- % Button -->
+<area onClick="alert('%');" shape="rect" coords="219,155,252,181" href="#">
+
+<!-- 1/x Button -->
+<area onClick="alert('1/x');" shape="rect" coords="219,187,252,213" href="#">
+
+
+
+
+<!-- Close Button -->
+<AREA href="#"
+onClick="fCloseWindow('Calc');"
+SHAPE=RECT COORDS="232,10,259,24">
+
+<!-- Drag Area -->
+<AREA
+onmousedown="fMouseDown('Calc', 1);"
+SHAPE=RECT COORDS="0,0,270,27">
+
+</map>
